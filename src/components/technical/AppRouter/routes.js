@@ -1,4 +1,5 @@
-import Dices from '../../games/qwinto/Dices';
+import Home from 'components/layout/Home';
+import Dices from 'components/games/qwinto/Dices';
 
 const qwinto = [
     {
@@ -8,5 +9,15 @@ const qwinto = [
 ];
 
 export const routes = [
-    ...qwinto
+    ...qwinto,
+    {
+        component: Home,
+        path: '/',
+        exact: true
+    },
+    {
+        component: Home,
+        path: '**',
+        exact: true
+    }
 ];

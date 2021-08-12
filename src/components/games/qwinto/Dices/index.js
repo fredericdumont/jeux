@@ -1,22 +1,14 @@
 import colors from './colors';
-import { Col, Container, Row, Button } from "react-bootstrap";
-import { Dice } from '../Dice';
+import { Col, Container, Row } from "react-bootstrap";
+import { Dice } from 'components/games/qwinto/Dice';
 import { useState } from 'react';
 
-import randomNumber from '../../../../functions/randomNumber';
+import randomNumber from 'functions/randomNumber';
+import { Button } from '@material-ui/core';
 
 export const Dices = () => {
-    const [selection, setSelection] = useState([
-        true,
-        true,
-        true
-    ]);
-
-    const [values, setValues] = useState([
-        '',
-        '',
-        ''
-    ]);
+    const [selection, setSelection] = useState([true, true, true]);
+    const [values, setValues] = useState([null, null, null]);
 
     const handleSelectionChange = (index) => {
         setSelection(previousSelection => previousSelection.map((currentSelection, selectionIndex) => {
@@ -26,10 +18,14 @@ export const Dices = () => {
 
     const handleClick = () => {
         setValues([
-            selection[0] ? randomNumber() : '',
-            selection[1] ? randomNumber() : '',
-            selection[2] ? randomNumber() : ''
+            selection[0] ? randomNumber() : null,
+            selection[1] ? randomNumber() : null,
+            selection[2] ? randomNumber() : null
         ])
+    }
+
+    const getTotal = () => {
+        return values.reduce((previousValue = 0, currentValue) => currentValue ? previousValue += currentValue : previousValue)
     }
 
     return <Container>
@@ -52,11 +48,31 @@ export const Dices = () => {
             }
         </Row>
 
+        {
+            getTotal() > 0 && <Row
+                className="justify-content-center mt-3"
+                noGutters
+            >
+                <Col xs="auto">
+                    <i>Total: <b>{getTotal()}</b></i>
+                </Col>
+            </Row>
+        }
+
         <Row
-            className="mt-5"
+            className="justify-content-center mt-3"
             noGutters
         >
-            <Button onClick={handleClick}>Tirage</Button>
+            <Col xs="auto">
+                <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleClick}
+                    className="text-capitalize"
+                >
+                    Nouveau tirage
+                </Button>
+            </Col>
         </Row>
     </Container>;
 }

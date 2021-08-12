@@ -1,5 +1,7 @@
+import { Row } from 'react-bootstrap';
+
 export const Header = () => {
-    return <div></div>
+    return <Row></Row>
 };
 
 export default Header;

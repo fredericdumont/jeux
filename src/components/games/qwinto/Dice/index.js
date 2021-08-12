@@ -1,4 +1,4 @@
-import { Container, Row } from "react-bootstrap"
+import { Container, Row } from 'react-bootstrap';
 
 import './dices.css'
 
@@ -24,7 +24,7 @@ export const Dice = ({
                 className="Dice-value rounded h1 text-white text-center"
                 style={{ backgroundColor: color }}
             >
-                {selected && <span className="align-middle">{value}</span>}
+                {selected && value && <span className="align-middle">{value}</span>}
             </div>
         </Row>
     </Container>
