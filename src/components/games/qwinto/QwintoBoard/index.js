@@ -61,8 +61,10 @@ const QwintoBoard = () => {
             )
         }
 
+        <Divider className="mt-2" />
+
         <Row
-            className="mt-1 justify-content-center"
+            className="mt-2 justify-content-center"
             noGutters
         >
             <Col xs={"auto"}>

@@ -3,6 +3,8 @@ import AppRouter from 'router/AppRouter';
 import Header from 'components/layout/Header';
 import { BrowserRouter } from 'react-router-dom';
 
+import './App.css';
+
 const App = () => {
   return <BrowserRouter>
     <Container className="App h-100">

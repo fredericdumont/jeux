@@ -1,12 +1,14 @@
-import colors from './colors';
-import { Col, Row } from "react-bootstrap";
-import { Dice } from 'components/games/qwinto/Dices/Dice';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
+
+import colors from './colors';
+import { Col, Row } from 'react-bootstrap';
+import { Dice } from 'components/games/qwinto/Dices/Dice';
 
 import randomNumber from 'functions/randomNumber';
 import { Button } from '@material-ui/core';
-import { connect } from 'react-redux';
+
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
 export const Dices = ({ total }) => {
     const [selection, setSelection] = useState([true, true, true]);
@@ -43,10 +45,6 @@ export const Dices = ({ total }) => {
         className="justify-content-end align-items-center"
         noGutters
     >
-        <Col xs="auto">
-            Score: <b>{total}</b>
-        </Col>
-
         {
             colors.map((color, index) => {
                 return <Col key={index} xs="auto">
@@ -59,6 +57,21 @@ export const Dices = ({ total }) => {
                     />
                 </Col>
             })
+        }
+
+        {
+            total && <Col
+                xs="auto"
+                className="p-0 m-0"
+            >
+                <DoubleArrowIcon />
+            </Col>
+        }
+
+        {
+            total && <Col xs="auto">
+                <b className="h2">{total}</b>
+            </Col>
         }
 
         <Col xs="auto">
