@@ -1,14 +1,18 @@
 import colors from './colors';
-import { Col, Container, Row } from "react-bootstrap";
-import { Dice } from 'components/games/qwinto/Dice';
-import { useState } from 'react';
+import { Col, Row } from "react-bootstrap";
+import { Dice } from 'components/games/qwinto/Dices/Dice';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import randomNumber from 'functions/randomNumber';
 import { Button } from '@material-ui/core';
+import { connect } from 'react-redux';
 
-export const Dices = () => {
+export const Dices = ({ total }) => {
     const [selection, setSelection] = useState([true, true, true]);
     const [values, setValues] = useState([null, null, null]);
+
+    const dispatch = useDispatch();
 
     const handleSelectionChange = (index) => {
         setSelection(previousSelection => previousSelection.map((currentSelection, selectionIndex) => {
@@ -24,57 +28,54 @@ export const Dices = () => {
         ])
     }
 
-    const getTotal = () => {
+    const getTotal = useCallback(() => {
         return values.reduce((previousValue = 0, currentValue) => currentValue ? previousValue += currentValue : previousValue)
-    }
+    }, [values])
 
-    return <Container>
-        <Row
-            className="justify-content-center"
-            noGutters
-        >
-            {
-                colors.map((color, index) => {
-                    return <Col key={index} xs="auto">
-                        <Dice
-                            color={color}
-                            selected={selection[index]}
-                            handleChange={handleSelectionChange}
-                            value={values[index]}
-                            index={index}
-                        />
-                    </Col>
-                })
-            }
-        </Row>
+    useEffect(() => {
+        dispatch({
+            type: 'UPDATE_DRAW',
+            value: getTotal()
+        });
+    }, [selection, dispatch, getTotal])
+
+    return <Row
+        className="justify-content-end align-items-center"
+        noGutters
+    >
+        <Col xs="auto">
+            Score: <b>{total}</b>
+        </Col>
 
         {
-            getTotal() > 0 && <Row
-                className="justify-content-center mt-3"
-                noGutters
-            >
-                <Col xs="auto">
-                    <i>Total: <b>{getTotal()}</b></i>
+            colors.map((color, index) => {
+                return <Col key={index} xs="auto">
+                    <Dice
+                        color={color}
+                        selected={selection[index]}
+                        value={values[index]}
+                        setValue={handleSelectionChange}
+                        index={index}
+                    />
                 </Col>
-            </Row>
+            })
         }
 
-        <Row
-            className="justify-content-center mt-3"
-            noGutters
-        >
-            <Col xs="auto">
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleClick}
-                    className="text-capitalize"
-                >
-                    Nouveau tirage
-                </Button>
-            </Col>
-        </Row>
-    </Container>;
+        <Col xs="auto">
+            <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClick}
+                className="text-capitalize"
+            >
+                Nouveau tirage
+            </Button>
+        </Col>
+    </Row>
 }
 
-export default Dices;
+const mapStateToProps = ({ draw }) => ({
+    total: draw
+});
+
+export default connect(mapStateToProps)(Dices);

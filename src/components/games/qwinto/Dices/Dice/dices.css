@@ -1,0 +1,8 @@
+.Dice-value {
+    width: 40px!important;
+    height: 40px!important;
+}
+
+.Dice-value.h2 {
+    margin: 0!important;
+}

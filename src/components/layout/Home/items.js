@@ -1,9 +1,7 @@
 const items = [
     {
-        label: '',
-        path: '',
-        src: '',
-        icon: '',
+        label: 'Qwinto',
+        path: '/qwinto',
         subItems: [
 
         ]

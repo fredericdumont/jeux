@@ -1,23 +1,27 @@
 import { Col, Container, Row } from 'react-bootstrap';
-import AppRouter from './components/technical/AppRouter';
-import Header from './components/layout/Header';
+import AppRouter from 'router/AppRouter';
+import Header from 'components/layout/Header';
+import { BrowserRouter } from 'react-router-dom';
 
 const App = () => {
-  return <div>
-    <Container className="App">
-      <Row className="App-header">
+  return <BrowserRouter>
+    <Container className="App h-100">
+      <Row
+        className="App-header"
+        noGutters
+      >
         <Header />
       </Row>
 
-      <Container className="App-content">
-        <Row className="justify-content-md-center">
-          <Col md="auto">
+      <Container className="App-content h-75">
+        <Row className="h-100">
+          <Col>
             <AppRouter />
           </Col>
         </Row>
       </Container>
     </Container>
-  </div>;
+  </BrowserRouter>
 }
 
 export default App;
