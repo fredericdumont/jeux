@@ -3,14 +3,14 @@ import { connect, useDispatch } from 'react-redux';
 
 import colors from './colors';
 import { Col, Row } from 'react-bootstrap';
-import { Dice } from 'components/games/qwinto/Dices/Dice';
+import { Dice } from 'components/games/qwinto/QwintoDraw/Dice';
 
 import randomNumber from 'functions/randomNumber';
 import { Button } from '@material-ui/core';
 
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
-export const Dices = ({ total }) => {
+export const QwintoDraw = ({ total, setCanApplyDraw }) => {
     const [selection, setSelection] = useState([true, true, true]);
     const [values, setValues] = useState([null, null, null]);
 
@@ -23,6 +23,10 @@ export const Dices = ({ total }) => {
     }
 
     const handleClick = () => {
+        if (setCanApplyDraw) {
+            setCanApplyDraw(true);
+        }
+
         setValues([
             selection[0] ? randomNumber() : null,
             selection[1] ? randomNumber() : null,
@@ -42,7 +46,7 @@ export const Dices = ({ total }) => {
     }, [selection, dispatch, getTotal])
 
     return <Row
-        className="justify-content-end align-items-center"
+        className="justify-content-center align-items-center"
         noGutters
     >
         {
@@ -59,20 +63,6 @@ export const Dices = ({ total }) => {
             })
         }
 
-        {
-            total && <Col
-                xs="auto"
-                className="p-0 m-0"
-            >
-                <DoubleArrowIcon />
-            </Col>
-        }
-
-        {
-            total && <Col xs="auto">
-                <b className="h2">{total}</b>
-            </Col>
-        }
 
         <Col xs="auto">
             <Button
@@ -81,9 +71,24 @@ export const Dices = ({ total }) => {
                 onClick={handleClick}
                 className="text-capitalize"
             >
-                Nouveau tirage
+                Tirage
             </Button>
         </Col>
+
+        {
+            total && <>
+                <Col
+                    xs="auto"
+                    className="p-0 m-0"
+                >
+                    <DoubleArrowIcon />
+                </Col>
+
+                <Col xs="auto">
+                    <b className="h2">{total}</b>
+                </Col>
+            </>
+        }
     </Row>
 }
 
@@ -91,4 +96,4 @@ const mapStateToProps = ({ draw }) => ({
     total: draw
 });
 
-export default connect(mapStateToProps)(Dices);
+export default connect(mapStateToProps)(QwintoDraw);

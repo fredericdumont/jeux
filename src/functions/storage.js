@@ -6,7 +6,12 @@ const saveToStorage = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
 }
 
+const clearStorage = (key) => {
+    localStorage.clear(key);
+}
+
 export {
     getFromStorage,
-    saveToStorage
+    saveToStorage,
+    clearStorage
 };

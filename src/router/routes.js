@@ -1,5 +1,5 @@
 import Home from 'components/layout/Home';
-import Dices from 'components/games/qwinto/Dices';
+import QwintoDraw from 'components/games/qwinto/QwintoDraw';
 import QwintoBoard from 'components/games/qwinto/QwintoBoard';
 
 const qwinto = [
@@ -8,7 +8,7 @@ const qwinto = [
         path: '/qwinto'
     },
     {
-        component: Dices,
+        component: QwintoDraw,
         path: '/qwinto/draw'
     }
 ];

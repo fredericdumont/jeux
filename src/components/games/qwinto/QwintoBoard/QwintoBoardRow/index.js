@@ -2,7 +2,7 @@ import React from 'react'
 import { Row } from 'react-bootstrap'
 import QwintoBoardItem from '../QwintoBoardItem'
 
-const QwintoBoardRow = ({ colors, rowIndex, value, setValue }) => {
+const QwintoBoardRow = ({ colors, rowIndex, value, setValue, disabled, canApplyDraw, setCanApplyDraw }) => {
     return <Row
         noGutters
         style={{
@@ -19,6 +19,9 @@ const QwintoBoardRow = ({ colors, rowIndex, value, setValue }) => {
                     colors={colors}
                     value={value}
                     setValue={setValue}
+                    disabled={disabled}
+                    canApplyDraw={canApplyDraw}
+                    setCanApplyDraw={setCanApplyDraw}
                 />
             })
         }

@@ -1,5 +1,5 @@
 import React from 'react';
-import './dices.css';
+import './QwintoDraw.css';
 
 export const Dice = ({
     color = 'blue',

@@ -6,17 +6,23 @@ import { getFromStorage, saveToStorage } from 'functions/storage';
 import { Col, Row } from 'react-bootstrap';
 import { Divider } from '@material-ui/core';
 
-import colors from '../Dices/colors';
+import colors from '../QwintoDraw/colors';
 
 import QwintoBoardErrors from './QwintoBoardErrors';
 import QwintoBoardRow from './QwintoBoardRow';
-import Dices from '../Dices';
+import QwintoDraw from 'components/games/qwinto/QwintoDraw';
+import QwintoBoardSettings from './QwintoBoardSettings';
+
+const storageKey = 'qwinto';
+const initGameState = {
+    rows: generateArray(3, generateArray(10, '')),
+    errors: generateArray(4, false)
+};
 
 const QwintoBoard = () => {
-    const [value, setValue] = useState(getFromStorage('qwinto') ?? {
-        rows: generateArray(3, generateArray(10, '')),
-        errors: generateArray(4, false)
-    });
+    const [value, setValue] = useState(getFromStorage('qwinto') ?? initGameState);
+    const [disabled, setDisabled] = useState(true);
+    const [canApplyDraw, setCanApplyDraw] = useState(true);
 
     const handleChangeErrors = useCallback(index => {
         setValue(vs => ({
@@ -32,10 +38,13 @@ const QwintoBoard = () => {
         }));
     }, [setValue]);
 
-
     useEffect(() => {
-        saveToStorage('qwinto', value);
+        saveToStorage(storageKey, value);
     }, [value]);
+
+    const resetValue = () => {
+        setValue(initGameState);
+    }
 
     return <div>
         {
@@ -55,6 +64,9 @@ const QwintoBoard = () => {
                         colors={colors[index]}
                         value={value.rows[index]}
                         setValue={handleChangeValue}
+                        disabled={disabled}
+                        canApplyDraw={canApplyDraw}
+                        setCanApplyDraw={setCanApplyDraw}
                     />
                 </Col>
             </Row>
@@ -64,7 +76,7 @@ const QwintoBoard = () => {
         <Divider className="mt-2" />
 
         <Row
-            className="mt-2 justify-content-center"
+            className="mt-2 justify-content-between"
             noGutters
         >
             <Col xs={"auto"}>
@@ -73,11 +85,19 @@ const QwintoBoard = () => {
                     setValue={handleChangeErrors}
                 />
             </Col>
+
+            <Col xs={"auto"}>
+                <QwintoBoardSettings
+                    disabled={disabled}
+                    setDisabled={setDisabled}
+                    resetValue={resetValue}
+                />
+            </Col>
         </Row>
 
         <Divider className="mt-2" />
 
-        <Dices />
+        <QwintoDraw setCanApplyDraw={setCanApplyDraw} />
     </div>
 }
 
