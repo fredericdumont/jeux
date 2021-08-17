@@ -15,14 +15,15 @@ export const Header = () => {
         return location.pathname === '/';
     }
 
-    return <Row className="mt-2">
+    return <Row className="mt-1">
         {
             !isHomePage() && <Col>
                 <IconButton
                     size="medium"
+                    className="p-2"
                     onClick={handleClick}
                 >
-                    <BiArrowBack fontSize="inherit" />
+                    <BiArrowBack />
                 </IconButton>
             </Col>
         }

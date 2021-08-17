@@ -39,20 +39,23 @@ const QwintoBoardErrors = ({ value, setValue }) => {
             style={{
                 backgroundColor: '#B8B8B8'
             }}
-            className="rounded"
-            xs="auto"
+            className="rounded m-0 p-0"
+            xs={7}
         >
             <Row
                 className="justify-content-center align-items-center"
                 noGutters
             >
-                <Col>
+                <Col
+                    className="m-2 p-0"
+                    xs={"auto"}
+                >
                     <ErrorIcon />
                 </Col>
                 {
                     value && value.map((element, index) => <Col
                         key={index}
-                        className="p-0 m-2"
+                        className="p-0 m-1"
                         xs="auto"
                     >
                         <Form>
@@ -61,6 +64,9 @@ const QwintoBoardErrors = ({ value, setValue }) => {
                                 onChange={() => handleClick(index)}
                                 type="checkbox"
                                 className="p-0 m-0"
+                                style={{
+                                    // backgroundColor: 'white'
+                                }}
                             />
                         </Form>
                     </Col>)

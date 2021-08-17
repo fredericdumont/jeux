@@ -1,4 +1,4 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import AppRouter from 'router/AppRouter';
 import Header from 'components/layout/Header';
 import { BrowserRouter } from 'react-router-dom';
@@ -7,7 +7,7 @@ import './App.css';
 
 const App = () => {
   return <BrowserRouter>
-    <Container className="App h-100">
+    <Row className="App h-100 justify-content-center">
       <Row
         className="App-header"
         noGutters
@@ -15,14 +15,14 @@ const App = () => {
         <Header />
       </Row>
 
-      <Container className="App-content h-75">
-        <Row className="h-100">
-          <Col>
-            <AppRouter />
-          </Col>
-        </Row>
-      </Container>
-    </Container>
+      <Row
+        className="h-100 justify-content-center App-content"
+      >
+        <Col xs="10">
+          <AppRouter />
+        </Col>
+      </Row>
+    </Row>
   </BrowserRouter>
 }
 

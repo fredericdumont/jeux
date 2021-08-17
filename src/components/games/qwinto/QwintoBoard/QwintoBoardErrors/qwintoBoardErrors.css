@@ -1,3 +1,13 @@
 .form-check .form-check-input {
     margin-left: 0px!important;
 }
+
+.form-check-input:checked {
+    background-color: grey!important;
+    border-color: grey!important;
+}
+
+.form-check-input:focus {
+    border-color: grey!important;
+    box-shadow: none!important;
+}

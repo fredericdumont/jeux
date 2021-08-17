@@ -61,7 +61,7 @@ const QwintoBoard = () => {
                 >
                     <QwintoBoardRow
                         rowIndex={index}
-                        colors={colors[index]}
+                        color={colors[index]}
                         value={value.rows[index]}
                         setValue={handleChangeValue}
                         disabled={disabled}
@@ -73,13 +73,13 @@ const QwintoBoard = () => {
             )
         }
 
-        <Divider className="mt-2" />
+        <Divider className="mt-1" />
 
         <Row
-            className="mt-2 justify-content-between"
+            className="mt-1 justify-content-between align-items-center"
             noGutters
         >
-            <Col xs={"auto"}>
+            <Col xs={5}>
                 <QwintoBoardErrors
                     value={value.errors}
                     setValue={handleChangeErrors}
@@ -91,13 +91,22 @@ const QwintoBoard = () => {
                     disabled={disabled}
                     setDisabled={setDisabled}
                     resetValue={resetValue}
+                    value={value}
                 />
             </Col>
+
         </Row>
 
-        <Divider className="mt-2" />
+        <Divider className="mt-1 mb-1" />
 
-        <QwintoDraw setCanApplyDraw={setCanApplyDraw} />
+        <Row
+            className="align-items-center justify-content-center no-row-padding"
+            noGutters
+        >
+            <QwintoDraw setCanApplyDraw={setCanApplyDraw} />
+        </Row>
+
+        
     </div>
 }
 

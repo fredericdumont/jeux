@@ -1,5 +1,5 @@
 import React from 'react'
-import { Col, Form } from 'react-bootstrap'
+import { Col } from 'react-bootstrap'
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -7,33 +7,27 @@ import { firestoreConnect } from 'react-redux-firebase';
 
 import qwintoBoardConfig from '../QwintoBoardRow/qwintoBoardConfig'
 
-import totalOfArray from 'functions/totalOfArray';
+import sumOfArray from 'functions/sumOfArray';
 
-import './qwintoBoardItem.css';
+import QwintoScore from '../../QwintoScore';
 
-const QwintoBoardItem = ({ rowIndex, colIndex, colors, value, setValue, total, disabled = true, canApplyDraw, setCanApplyDraw }) => {
+const QwintoBoardItem = ({
+    rowIndex,
+    colIndex,
+    color,
+    value,
+    setValue,
+    total,
+    disabled = true,
+    canApplyDraw,
+    setCanApplyDraw
+}) => {
     const rowConfig = qwintoBoardConfig[rowIndex];
     const isDisabledItem = rowConfig.disabled === colIndex;
     const isScoreItem = rowConfig.score.some(element => element === colIndex);
 
-    const updateValue = newValue => {
-        if (!canApplyDraw) {
-            return;
-        }
-
-        if (!disabled) {
-            return;
-        }
-
-        if (value) {
-            return;
-        }
-
-        if (newValue === '') {
-            return;
-        }
-
-        if ((newValue === 0) && (newValue > 18)) {
+    const applyValue = (newValue) => {
+        if ((newValue === 0) || (newValue > 18)) {
             return;
         }
 
@@ -41,48 +35,45 @@ const QwintoBoardItem = ({ rowIndex, colIndex, colors, value, setValue, total, d
         setValue(rowIndex, colIndex, newValue);
     }
 
+    const updateValue = newValue => {
+
+        const newValueParsed = newValue === '' ? '' : JSON.parse(newValue);
+
+        if (!disabled) {
+            applyValue(newValueParsed);
+        }
+
+        return;
+    }
+
     const handleClick = () => {
-        if (total) {
-            updateValue(total);
+        if (total && disabled && canApplyDraw) {
+            applyValue(total);
         }
     }
 
-    const getClasses = () => {
-        let basesClases = 'QwintoBoardItem-input border text-center'
-
-        if (isScoreItem) {
-            basesClases += ' rounded-circle';
-        }
-
-        return basesClases;
-    }
-
-    return <Col className="QwintoBoardItem p-1">
+    return <Col className="p-1">
         {
             isDisabledItem && <div className="QwintoBoardItem-input"></div>
         }
+        
         {
-            !isDisabledItem && <Form
-                onClick={handleClick}
-            >
-                <Form.Control
-                    type="number"
-                    className={getClasses()}
-                    style={{
-                        backgroundColor: colors.secondary
-                    }}
-                    value={value}
-                    onChange={(event) => updateValue(event.target.value)}
-                    disabled={disabled}
-                />
-            </Form>
+            !isDisabledItem && <QwintoScore
+                formClick={handleClick}
+                inputChange={(event) => updateValue(event.target.value)}
+                disabled={disabled}
+                backgroundColor={color.secondary}
+                rounded={isScoreItem}
+                value={value}
+            />
         }
+
     </Col>
 }
 
 const mapStateToProps = ({ firestore }) => {
     return {
-        total: totalOfArray(firestore.data?.qwinto?.draw?.values) ?? null
+        total: sumOfArray(firestore.data?.qwinto?.draw?.values) ?? null
     };
 }
 export default compose(

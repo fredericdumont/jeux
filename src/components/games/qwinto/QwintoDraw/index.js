@@ -1,29 +1,36 @@
-import { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
+import { useEffect } from 'react';
 
-import colors from './colors';
-import { Col, Row } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
+
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import { saveDraw, saveSelection } from 'firestore/qwinto';
+
 import { Dice } from 'components/games/qwinto/QwintoDraw/Dice';
 
-import randomNumber from 'functions/randomNumber';
-import { Button } from '@material-ui/core';
+import colors from './colors';
 
+import { Button } from '@material-ui/core';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
-import { saveDraw } from 'firestore/saveDraw';
-import { firestoreConnect } from 'react-redux-firebase';
-import totalOfArray from 'functions/totalOfArray';
+
+
+import randomNumber from 'functions/randomNumber';
+import sumOfArray from 'functions/sumOfArray';
 import generateArray from 'functions/generateArray';
 
 const initialSelectionState = generateArray(3, true);
 
-export const QwintoDraw = ({ total, values, setCanApplyDraw }) => {
-    const [selection, setSelection] = useState(initialSelectionState);
+export const QwintoDraw = ({ total, values, setCanApplyDraw, selection }) => {
+
+    useEffect(() => {
+        if (selection.length !== 3) {
+            saveSelection(initialSelectionState);
+        }
+    }, [selection]);
 
     const handleSelectionChange = (index) => {
-        setSelection(previousSelection => previousSelection.map((currentSelection, selectionIndex) => {
-            return selectionIndex === index ? !currentSelection : currentSelection;
-        }))
+        saveSelection(selection.map((s, i) => index === i ? !s : s));
     }
 
     const handleClick = () => {
@@ -40,13 +47,14 @@ export const QwintoDraw = ({ total, values, setCanApplyDraw }) => {
         setCanApplyDraw(true);
     }, [values, setCanApplyDraw])
 
-    return <Row
-        className="justify-content-center align-items-center"
-        noGutters
-    >
+    return <>
         {
             colors.map((color, index) => {
-                return <Col key={index} xs="auto">
+                return <Col
+                    key={index}
+                    className="m-1"
+                    xs={"auto"}
+                >
                     <Dice
                         color={color}
                         selected={selection[index]}
@@ -58,8 +66,28 @@ export const QwintoDraw = ({ total, values, setCanApplyDraw }) => {
             })
         }
 
+        {
+            (total > 0) && <>
+                <Col
+                    xs={1}
+                    className="p-0 m-0 text-center"
+                >
+                    <DoubleArrowIcon />
+                </Col>
 
-        <Col xs="auto">
+                <Col
+                    xs={1}
+                    className="text-center"
+                >
+                    <b className="h2">{total}</b>
+                </Col>
+            </>
+        }
+
+        <Col
+            className="mx-3"
+            xs={"auto"}
+        >
             <Button
                 variant="contained"
                 color="primary"
@@ -69,28 +97,14 @@ export const QwintoDraw = ({ total, values, setCanApplyDraw }) => {
                 Tirage
             </Button>
         </Col>
-
-        {
-            (total > 0) && <>
-                <Col
-                    xs="auto"
-                    className="p-0 m-0"
-                >
-                    <DoubleArrowIcon />
-                </Col>
-
-                <Col xs="auto">
-                    <b className="h2">{total}</b>
-                </Col>
-            </>
-        }
-    </Row>
+    </>
 }
 
 const mapStateToProps = ({ firestore }) => {
     return {
-        total: totalOfArray(firestore.data?.qwinto?.draw?.values) ?? null,
-        values: firestore.data?.qwinto?.draw?.values ?? initialSelectionState
+        total: sumOfArray(firestore.data?.qwinto?.draw?.values) ?? null,
+        values: firestore.data?.qwinto?.draw?.values ?? [],
+        selection: firestore.data?.qwinto?.selection?.values ?? []
     };
 }
 
