@@ -1,11 +1,17 @@
 import React from 'react'
 import { Col, Form } from 'react-bootstrap'
+
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+
 import qwintoBoardConfig from '../QwintoBoardRow/qwintoBoardConfig'
+
+import totalOfArray from 'functions/totalOfArray';
 
 import './qwintoBoardItem.css';
 
-const QwintoBoardItem = ({ rowIndex, colIndex, colors, value, setValue, draw, disabled = true, canApplyDraw, setCanApplyDraw }) => {
+const QwintoBoardItem = ({ rowIndex, colIndex, colors, value, setValue, total, disabled = true, canApplyDraw, setCanApplyDraw }) => {
     const rowConfig = qwintoBoardConfig[rowIndex];
     const isDisabledItem = rowConfig.disabled === colIndex;
     const isScoreItem = rowConfig.score.some(element => element === colIndex);
@@ -36,8 +42,8 @@ const QwintoBoardItem = ({ rowIndex, colIndex, colors, value, setValue, draw, di
     }
 
     const handleClick = () => {
-        if (draw) {
-            updateValue(draw);
+        if (total) {
+            updateValue(total);
         }
     }
 
@@ -74,6 +80,12 @@ const QwintoBoardItem = ({ rowIndex, colIndex, colors, value, setValue, draw, di
     </Col>
 }
 
-const mapStateToProps = ({ draw }) => ({ draw });
-
-export default connect(mapStateToProps)(QwintoBoardItem);
+const mapStateToProps = ({ firestore }) => {
+    return {
+        total: totalOfArray(firestore.data?.qwinto?.draw?.values) ?? null
+    };
+}
+export default compose(
+    firestoreConnect(() => ['qwinto']),
+    connect(mapStateToProps)
+)(QwintoBoardItem);

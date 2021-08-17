@@ -1,5 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 
 import colors from './colors';
 import { Col, Row } from 'react-bootstrap';
@@ -9,12 +10,15 @@ import randomNumber from 'functions/randomNumber';
 import { Button } from '@material-ui/core';
 
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import { saveDraw } from 'firestore/saveDraw';
+import { firestoreConnect } from 'react-redux-firebase';
+import totalOfArray from 'functions/totalOfArray';
+import generateArray from 'functions/generateArray';
 
-export const QwintoDraw = ({ total, setCanApplyDraw }) => {
-    const [selection, setSelection] = useState([true, true, true]);
-    const [values, setValues] = useState([null, null, null]);
+const initialSelectionState = generateArray(3, true);
 
-    const dispatch = useDispatch();
+export const QwintoDraw = ({ total, values, setCanApplyDraw }) => {
+    const [selection, setSelection] = useState(initialSelectionState);
 
     const handleSelectionChange = (index) => {
         setSelection(previousSelection => previousSelection.map((currentSelection, selectionIndex) => {
@@ -23,27 +27,18 @@ export const QwintoDraw = ({ total, setCanApplyDraw }) => {
     }
 
     const handleClick = () => {
-        if (setCanApplyDraw) {
-            setCanApplyDraw(true);
-        }
+        setCanApplyDraw(true);
 
-        setValues([
+        saveDraw([
             selection[0] ? randomNumber() : null,
             selection[1] ? randomNumber() : null,
             selection[2] ? randomNumber() : null
         ])
     }
 
-    const getTotal = useCallback(() => {
-        return values.reduce((previousValue = 0, currentValue) => currentValue ? previousValue += currentValue : previousValue)
-    }, [values])
-
     useEffect(() => {
-        dispatch({
-            type: 'UPDATE_DRAW',
-            value: getTotal()
-        });
-    }, [selection, dispatch, getTotal])
+        setCanApplyDraw(true);
+    }, [values, setCanApplyDraw])
 
     return <Row
         className="justify-content-center align-items-center"
@@ -76,7 +71,7 @@ export const QwintoDraw = ({ total, setCanApplyDraw }) => {
         </Col>
 
         {
-            total && <>
+            (total > 0) && <>
                 <Col
                     xs="auto"
                     className="p-0 m-0"
@@ -92,8 +87,14 @@ export const QwintoDraw = ({ total, setCanApplyDraw }) => {
     </Row>
 }
 
-const mapStateToProps = ({ draw }) => ({
-    total: draw
-});
+const mapStateToProps = ({ firestore }) => {
+    return {
+        total: totalOfArray(firestore.data?.qwinto?.draw?.values) ?? null,
+        values: firestore.data?.qwinto?.draw?.values ?? initialSelectionState
+    };
+}
 
-export default connect(mapStateToProps)(QwintoDraw);
+export default compose(
+    firestoreConnect(() => ['qwinto']),
+    connect(mapStateToProps)
+)(QwintoDraw);
