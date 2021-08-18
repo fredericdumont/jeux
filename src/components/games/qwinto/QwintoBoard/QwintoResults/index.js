@@ -53,7 +53,7 @@ const QwintoResults = ({
 
         <Modal.Body>
             <Row
-                className="ml-4 no-row-padding align-items-baseline justify-content-between"
+                className="ml-4 align-items-baseline justify-content-between"
                 noGutters
             >
                 {

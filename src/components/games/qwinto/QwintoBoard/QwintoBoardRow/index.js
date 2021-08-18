@@ -2,7 +2,14 @@ import React from 'react'
 import { Row } from 'react-bootstrap'
 import QwintoBoardItem from '../QwintoBoardItem'
 
-const QwintoBoardRow = ({ color, rowIndex, value, setValue, disabled, canApplyDraw, setCanApplyDraw }) => {
+const QwintoBoardRow = ({
+    row,
+    board,
+    setBoard,
+    disabled,
+    canApplyDraw,
+    color
+}) => {
     return <Row
         noGutters
         style={{
@@ -11,17 +18,17 @@ const QwintoBoardRow = ({ color, rowIndex, value, setValue, disabled, canApplyDr
         className="border rounded"
     >
         {
-            value.map((value, index) => {
+            board.rows[row].map((col, index) => {
                 return <QwintoBoardItem
                     key={index}
-                    colIndex={index}
-                    rowIndex={rowIndex}
+                    board={board}
+                    col={index}
+                    row={row}
                     color={color}
-                    value={value}
-                    setValue={setValue}
+                    value={col}
+                    setBoard={setBoard}
                     disabled={disabled}
                     canApplyDraw={canApplyDraw}
-                    setCanApplyDraw={setCanApplyDraw}
                 />
             })
         }

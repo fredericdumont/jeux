@@ -45,7 +45,7 @@ const getQwintoResults = (results) => {
 
     const rows = results
         .rows
-        .map(row => filterFalsy(row).length === 9 ? row.pop() : filterFalsy(row).length);
+        .map(row => filterFalsy(row).length === 9 ? row[9] : filterFalsy(row).length);
 
     const cols = scoresLocation
         .map(location => {

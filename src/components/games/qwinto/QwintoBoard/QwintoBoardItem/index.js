@@ -10,33 +10,36 @@ import qwintoBoardConfig from '../QwintoBoardRow/qwintoBoardConfig'
 import sumOfArray from 'functions/sumOfArray';
 
 import QwintoScore from '../../QwintoScore';
+import checkQwintoPlacement from '../../functions/checkQwintoPlacement';
+
+import { MdClose } from 'react-icons/md';
+
+const itemSize = '35px';
 
 const QwintoBoardItem = ({
-    rowIndex,
-    colIndex,
+    row,
+    col,
     color,
     value,
-    setValue,
+    board,
+    setBoard,
     total,
     disabled = true,
-    canApplyDraw,
-    setCanApplyDraw
+    canApplyDraw
 }) => {
-    const rowConfig = qwintoBoardConfig[rowIndex];
-    const isDisabledItem = rowConfig.disabled === colIndex;
-    const isScoreItem = rowConfig.score.some(element => element === colIndex);
+    const rowConfig = qwintoBoardConfig[row];
+    const isDisabledItem = rowConfig.disabled === col;
+    const isScoreItem = rowConfig.score.some(element => element === col);
 
     const applyValue = (newValue) => {
-        if ((newValue === 0) || (newValue > 18)) {
+        if (((newValue === 0) || (newValue > 18))) {
             return;
         }
 
-        setCanApplyDraw(false);
-        setValue(rowIndex, colIndex, newValue);
+        setBoard(row, col, newValue);
     }
 
-    const updateValue = newValue => {
-
+    const handleChange = newValue => {
         const newValueParsed = newValue === '' ? '' : JSON.parse(newValue);
 
         if (!disabled) {
@@ -52,20 +55,43 @@ const QwintoBoardItem = ({
         }
     }
 
+    const isValidPlacement = () => {
+        return checkQwintoPlacement(board, total, row, col)
+    }
+
     return <Col className="p-1">
         {
             isDisabledItem && <div className="QwintoBoardItem-input"></div>
         }
-        
+
         {
-            !isDisabledItem && <QwintoScore
-                formClick={handleClick}
-                inputChange={(event) => updateValue(event.target.value)}
-                disabled={disabled}
-                backgroundColor={color.secondary}
-                rounded={isScoreItem}
-                value={value}
-            />
+            !isDisabledItem && <div style={{
+                position: 'relative'
+            }}>
+                {
+                    !isValidPlacement() && !value && canApplyDraw && <div style={{
+                        position: 'absolute',
+                        width: itemSize,
+                        height: itemSize
+                    }}>
+                        <MdClose style={{
+                            fontSize: itemSize
+                        }} />
+                    </div>
+                }
+
+                <QwintoScore
+                    className={disabled ? 'pointer' : ''}
+                    formClick={handleClick}
+                    inputChange={(event) => handleChange(event.target.value)}
+                    disabled={disabled}
+                    backgroundColor={color.secondary}
+                    rounded={isScoreItem}
+                    value={value}
+                    size={itemSize}
+                    bold
+                />
+            </div>
         }
 
     </Col>

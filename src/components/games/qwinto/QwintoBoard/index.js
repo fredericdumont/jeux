@@ -12,6 +12,8 @@ import QwintoBoardErrors from './QwintoBoardErrors';
 import QwintoBoardRow from './QwintoBoardRow';
 import QwintoDraw from 'components/games/qwinto/QwintoDraw';
 import QwintoBoardSettings from './QwintoBoardSettings';
+import checkQwintoPlacement from '../functions/checkQwintoPlacement';
+import getQwintoResults from '../functions/getQwintoResults';
 
 const storageKey = 'qwinto';
 const initGameState = {
@@ -20,35 +22,40 @@ const initGameState = {
 };
 
 const QwintoBoard = () => {
-    const [value, setValue] = useState(getFromStorage('qwinto') ?? initGameState);
+    const [board, setBoard] = useState(getFromStorage('qwinto') ?? initGameState);
     const [disabled, setDisabled] = useState(true);
     const [canApplyDraw, setCanApplyDraw] = useState(true);
+    const [results, setResults] = useState(null);
 
     const handleChangeErrors = useCallback(index => {
-        setValue(vs => ({
+        setBoard(vs => ({
             ...vs,
             errors: vs.errors.map((error, i) => index === i ? !error : error)
         }));
-    }, [setValue]);
+    }, [setBoard]);
 
-    const handleChangeValue = useCallback((rowIndex, colIndex, value) => {
-        setValue(vs => ({
-            ...vs,
-            rows: vs.rows.map((row, ri) => rowIndex === ri ? row.map((v, ci) => colIndex === ci ? value : v) : row)
-        }));
-    }, [setValue]);
+    const handleChangeBoard = useCallback((row, col, newValue) => {
+        if (checkQwintoPlacement(board, newValue, row, col) || !disabled) {
+            setCanApplyDraw(false);
+            setBoard(vs => ({
+                ...vs,
+                rows: vs.rows.map((r, ri) => row === ri ? r.map((c, ci) => col === ci ? newValue : c) : r)
+            }));
+        }
+    }, [setBoard, board, setCanApplyDraw, disabled]);
 
     useEffect(() => {
-        saveToStorage(storageKey, value);
-    }, [value]);
+        saveToStorage(storageKey, board);
+        setResults(getQwintoResults(board));
+    }, [board]);
 
-    const resetValue = () => {
-        setValue(initGameState);
+    const resetBoard = () => {
+        setBoard(initGameState);
     }
 
     return <div>
         {
-            value.rows.map((row, index) => <Row
+            board.rows.map((row, index) => <Row
                 className="mt-1"
                 key={index}
                 noGutters
@@ -60,13 +67,12 @@ const QwintoBoard = () => {
                     }}
                 >
                     <QwintoBoardRow
-                        rowIndex={index}
+                        row={index}
                         color={colors[index]}
-                        value={value.rows[index]}
-                        setValue={handleChangeValue}
+                        board={board}
+                        setBoard={handleChangeBoard}
                         disabled={disabled}
                         canApplyDraw={canApplyDraw}
-                        setCanApplyDraw={setCanApplyDraw}
                     />
                 </Col>
             </Row>
@@ -79,10 +85,10 @@ const QwintoBoard = () => {
             className="mt-1 justify-content-between align-items-center"
             noGutters
         >
-            <Col xs={5}>
+            <Col xs={6}>
                 <QwintoBoardErrors
-                    value={value.errors}
-                    setValue={handleChangeErrors}
+                    errors={board.errors}
+                    setBoard={handleChangeErrors}
                 />
             </Col>
 
@@ -90,8 +96,8 @@ const QwintoBoard = () => {
                 <QwintoBoardSettings
                     disabled={disabled}
                     setDisabled={setDisabled}
-                    resetValue={resetValue}
-                    value={value}
+                    resetBoard={resetBoard}
+                    results={results}
                 />
             </Col>
 
@@ -100,13 +106,13 @@ const QwintoBoard = () => {
         <Divider className="mt-1 mb-1" />
 
         <Row
-            className="align-items-center justify-content-center no-row-padding"
+            className="align-items-center justify-content-center"
             noGutters
         >
             <QwintoDraw setCanApplyDraw={setCanApplyDraw} />
         </Row>
 
-        
+
     </div>
 }
 

@@ -13,10 +13,12 @@ const QwintoScore = ({
     borderColor = null,
     rounded = false,
     value,
-    size = '35px'
+    size = '35px',
+    className = '',
+    bold = false
 }) => {
     const getClasses = () => {
-        let basesClases = 'border text-center align-top p-0'
+        let basesClases = `border text-center align-top p-0 ${className}`
 
         if (rounded) {
             basesClases += ' rounded-circle';
@@ -25,20 +27,33 @@ const QwintoScore = ({
         return basesClases;
     }
 
+    const getStyle = () => {
+        const style = {
+            backgroundColor,
+            width: `${size}`,
+            height: `${size}`,
+            color
+        };
+
+        if (borderColor) {
+            style.borderColor = borderColor;
+        }
+
+        if (bold) {
+            style.fontWeight = 'bold';
+        }
+
+        return style;
+    }
+
     return <Form
+        className={`QwintoScore`}
         onClick={formClick}
-        className="QwintoScore"
     >
         <Form.Control
             type="number"
             className={getClasses()}
-            style={{
-                backgroundColor,
-                width: `${size}`,
-                height: `${size}`,
-                color,
-                ...(borderColor ? { borderColor } : {})
-            }}
+            style={getStyle()}
             value={value}
             onChange={inputChange}
             disabled={disabled}

@@ -1,31 +1,32 @@
 import React from 'react';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import ErrorIcon from '@material-ui/icons/Error';
 
 import './qwintoBoardErrors.css';
+import { Checkbox } from '@material-ui/core';
 
 const errorsCount = 4;
 
-const QwintoBoardErrors = ({ value, setValue }) => {
+const QwintoBoardErrors = ({ errors, setBoard }) => {
     const handleClick = index => {
-        if (value[index]) {
+        if (errors[index]) {
             if (index === (errorsCount - 1)) {
-                if (value[index - 1] === true) {
-                    setValue(errorsCount - 1);
+                if (errors[index - 1] === true) {
+                    setBoard(errorsCount - 1);
                 }
             } else {
-                if (value[index + 1] === false) {
-                    setValue(index);
+                if (errors[index + 1] === false) {
+                    setBoard(index);
                 }
             }
         } else {
             if (index === 0) {
-                if (value[index + 1] === false) {
-                    setValue(0);
+                if (errors[index + 1] === false) {
+                    setBoard(0);
                 }
             } else {
-                if (value[index - 1] === true) {
-                    setValue(index);
+                if (errors[index - 1] === true) {
+                    setBoard(index);
                 }
             }
         }
@@ -52,23 +53,19 @@ const QwintoBoardErrors = ({ value, setValue }) => {
                 >
                     <ErrorIcon />
                 </Col>
+
                 {
-                    value && value.map((element, index) => <Col
+                    errors && errors.map((error, index) => <Col
                         key={index}
-                        className="p-0 m-1"
+                        className="p-0 m-0"
                         xs="auto"
                     >
-                        <Form>
-                            <Form.Check
-                                checked={element}
-                                onChange={() => handleClick(index)}
-                                type="checkbox"
-                                className="p-0 m-0"
-                                style={{
-                                    // backgroundColor: 'white'
-                                }}
-                            />
-                        </Form>
+                        <Checkbox
+                            checked={error}
+                            onChange={() => handleClick(index)}
+                            color="primary"
+                            className="p-1"
+                        />
                     </Col>)
                 }
             </Row>

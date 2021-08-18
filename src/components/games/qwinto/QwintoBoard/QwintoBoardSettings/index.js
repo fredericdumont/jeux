@@ -10,14 +10,18 @@ import { IconButton } from '@material-ui/core';
 
 import ConfirmModal from 'components/layout/ConfirmModal';
 import QwintoResults from '../QwintoResults';
-import getQwintoResults from '../../getQwintoResults';
 
-const QwintoBoardSettings = ({ disabled, setDisabled, resetValue, value }) => {
+const QwintoBoardSettings = ({
+    disabled,
+    setDisabled,
+    resetBoard,
+    results
+}) => {
     const [show, setShow] = useState(false);
     const [showResults, setShowResults] = useState(false);
 
     const handleClear = () => {
-        resetValue();
+        resetBoard();
     }
 
     return <Row noGutters>
@@ -66,10 +70,10 @@ const QwintoBoardSettings = ({ disabled, setDisabled, resetValue, value }) => {
         />
 
         {
-            showResults && <QwintoResults
+            showResults && results && <QwintoResults
                 show={showResults}
                 setShow={setShowResults}
-                results={getQwintoResults(value)}
+                results={results}
             />
         }
     </Row>

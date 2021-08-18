@@ -1,7 +1,3 @@
 .App-content {
     max-width: 900px!important;
 }
-
-.no-row-padding>* {
-    padding: 0px!important;
-  }
