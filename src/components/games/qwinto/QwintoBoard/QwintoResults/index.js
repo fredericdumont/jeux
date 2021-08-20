@@ -33,6 +33,7 @@ const QwintoResults = ({
                 borderColor={borderColor}
                 value={value}
                 rounded={rounded}
+                disabled={true}
             />
         </Col>
         )

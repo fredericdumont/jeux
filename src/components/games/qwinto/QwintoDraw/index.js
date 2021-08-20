@@ -21,7 +21,7 @@ import generateArray from 'functions/generateArray';
 
 const initialSelectionState = generateArray(3, true);
 
-export const QwintoDraw = ({ total, values, setCanApplyDraw, selection }) => {
+export const QwintoDraw = ({ total, draws, random, setCanApplyDraw, selection }) => {
 
     useEffect(() => {
         if (selection.length !== 3) {
@@ -34,18 +34,19 @@ export const QwintoDraw = ({ total, values, setCanApplyDraw, selection }) => {
     }
 
     const handleClick = () => {
-        setCanApplyDraw(true);
-
-        saveDraw([
-            selection[0] ? randomNumber() : null,
-            selection[1] ? randomNumber() : null,
-            selection[2] ? randomNumber() : null
-        ])
+        saveDraw({
+            random: randomNumber(0, 100000),
+            values: [
+                selection[0] ? randomNumber() : null,
+                selection[1] ? randomNumber() : null,
+                selection[2] ? randomNumber() : null
+            ]
+        });
     }
 
     useEffect(() => {
         setCanApplyDraw(true);
-    }, [values, setCanApplyDraw])
+    }, [draws, setCanApplyDraw, random])
 
     return <>
         {
@@ -58,7 +59,7 @@ export const QwintoDraw = ({ total, values, setCanApplyDraw, selection }) => {
                     <Dice
                         color={color}
                         selected={selection[index]}
-                        value={values[index]}
+                        value={draws[index]}
                         setValue={handleSelectionChange}
                         index={index}
                     />
@@ -103,7 +104,8 @@ export const QwintoDraw = ({ total, values, setCanApplyDraw, selection }) => {
 const mapStateToProps = ({ firestore }) => {
     return {
         total: sumOfArray(firestore.data?.qwinto?.draw?.values) ?? null,
-        values: firestore.data?.qwinto?.draw?.values ?? [],
+        draws: firestore.data?.qwinto?.draw?.values ?? [],
+        random: firestore.data?.qwinto?.draw?.random,
         selection: firestore.data?.qwinto?.selection?.values ?? []
     };
 }

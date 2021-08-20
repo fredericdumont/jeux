@@ -37,6 +37,7 @@ const QwintoBoard = () => {
     const handleChangeBoard = useCallback((row, col, newValue) => {
         if (checkQwintoPlacement(board, newValue, row, col) || !disabled) {
             setCanApplyDraw(false);
+            
             setBoard(vs => ({
                 ...vs,
                 rows: vs.rows.map((r, ri) => row === ri ? r.map((c, ci) => col === ci ? newValue : c) : r)

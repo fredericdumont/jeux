@@ -14,13 +14,18 @@ const QwintoScore = ({
     value,
     size = '35px',
     className = '',
-    bold = false
+    bold = false,
+    pointer = false
 }) => {
     const getClasses = () => {
         let classes = `text-center rounded font-text-bold align-top`
 
         if (rounded) {
             classes += ' rounded-circle';
+        }
+
+        if (pointer) {
+            classes += ' pointer';
         }
 
         return classes;
@@ -55,7 +60,6 @@ const QwintoScore = ({
             value={value}
             onChange={inputChange}
             type="number"
-            id={'QwintoScore'}
             style={getStyle()}
             className={getClasses()}
             disabled={disabled}

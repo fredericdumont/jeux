@@ -1,7 +1,7 @@
 import { firestore } from 'index';
 
-const saveDraw = (values) => {
-    firestore.collection('qwinto').doc('draw').set({ values });
+const saveDraw = (draw) => {
+    firestore.collection('qwinto').doc('draw').set(draw);
 }
 
 const saveSelection = (values) => {

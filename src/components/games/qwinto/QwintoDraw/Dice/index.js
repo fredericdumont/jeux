@@ -20,34 +20,21 @@ export const Dice = ({
     selected = true,
     index
 }) => {
-    const getIcon = () => {
-        let Icon = null;
-
-        switch (value) {
-            case 1:
-                Icon = BiDice1;
-                break;
-            case 2:
-                Icon = BiDice2;
-                break;
-            case 3:
-                Icon = BiDice3;
-                break;
-            case 4:
-                Icon = BiDice4;
-                break;
-            case 5:
-                Icon = BiDice5;
-                break;
-            case 6:
-                Icon = BiDice6;
-                break;
-            default:
-                Icon = BiSquare;
-                break;
+    const getIcon = () => {       
+        if (!value) {
+            return getIconWithStyle(BiSquare);
         }
 
-        return getIconWithStyle(Icon)
+        const icons = [
+            BiDice1,
+            BiDice2,
+            BiDice3,
+            BiDice4,
+            BiDice5,
+            BiDice6
+        ];
+
+        return getIconWithStyle(icons[value - 1]);
     }
 
     const getIconWithStyle = (Icon) => {

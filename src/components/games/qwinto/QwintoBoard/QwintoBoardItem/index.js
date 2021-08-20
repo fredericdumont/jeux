@@ -50,7 +50,7 @@ const QwintoBoardItem = ({
     }
 
     const handleClick = () => {
-        if (total && disabled && canApplyDraw) {
+        if (total && disabled && canApplyDraw && !value) {
             applyValue(total);
         }
     }
@@ -82,7 +82,7 @@ const QwintoBoardItem = ({
                 }
 
                 <QwintoScore
-                    className={disabled ? 'p-1 pointer' : 'p-1'}
+                    className="p-1"
                     formClick={handleClick}
                     inputChange={(event) => handleChange(event.target.value)}
                     disabled={disabled}
@@ -91,6 +91,7 @@ const QwintoBoardItem = ({
                     rounded={isScoreItem}
                     value={value}
                     size={itemSize}
+                    pointer={disabled}
                     bold
                 />
             </>
