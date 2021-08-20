@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'components/layout/Grid';
 
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -24,7 +24,7 @@ const QwintoBoardSettings = ({
         resetBoard();
     }
 
-    return <Row noGutters>
+    return <Row>
         <Col
             xs="auto"
             className="p-0"
@@ -51,7 +51,7 @@ const QwintoBoardSettings = ({
         </Col>
 
         <Col
-            xs={"auto"}
+            xs="auto"
             className="p-0"
         >
             <IconButton
@@ -63,8 +63,8 @@ const QwintoBoardSettings = ({
         </Col>
 
         <ConfirmModal
-            show={show}
-            setShow={setShow}
+            open={show}
+            setOpen={setShow}
             onValidate={handleClear}
             title="Vider la grille ?"
         />

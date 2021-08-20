@@ -1,45 +1,58 @@
 import React from 'react';
 
-import { Modal } from 'react-bootstrap';
-import { Button } from '@material-ui/core';
+import { Button, Divider, Typography } from '@material-ui/core';
+import Modal from '../Modal';
+import { Col, Row } from '../Grid';
 
-const ConfirmModal = ({ show, setShow, title, validateLabel = 'Oui', cancelLabel = 'Non', onValidate }) => {
+const ConfirmModal = ({
+    title,
+    validateLabel = 'Oui',
+    cancelLabel = 'Non',
+    onValidate,
+    open,
+    setOpen
+}) => {
     const handleValidate = () => {
         onValidate();
-        setShow(false);
+        setOpen(false);
     }
 
     return <Modal
-        show={show}
-        onHide={() => setShow(false)}
+        open={open}
+        setOpen={setOpen}
     >
-        <Modal.Header className="justify-content-center">
-            <Modal.Title>
-                {title}
-            </Modal.Title>
-        </Modal.Header>
+        <Typography variant="h5" gutterBottom>
+            {title}
+        </Typography>
 
-        <Modal.Footer className="justify-content-center">
-            <div className="mr-4">
+        <Divider variant="middle" />
+
+        <Row
+            justifyContent="center"
+            spacing={1}
+        >
+            <Col>
                 <Button
                     variant="outlined"
                     color="primary"
                     className="text-capitalize"
-                    onClick={() => setShow(false)}
+                    onClick={() => setOpen(false)}
                 >
                     {cancelLabel}
                 </Button>
-            </div>
+            </Col>
 
-            <Button
-                variant="contained"
-                color="primary"
-                className="text-capitalize"
-                onClick={handleValidate}
-            >
-                {validateLabel}
-            </Button>
-        </Modal.Footer>
+            <Col>
+                <Button
+                    variant="contained"
+                    color="primary"
+                    className="text-capitalize"
+                    onClick={handleValidate}
+                >
+                    {validateLabel}
+                </Button>
+            </Col>
+        </Row>
     </Modal>
 }
 

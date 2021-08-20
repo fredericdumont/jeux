@@ -1,5 +1,5 @@
 import React from 'react'
-import { Col } from 'react-bootstrap'
+import { Col } from 'components/layout/Grid'
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -14,7 +14,7 @@ import checkQwintoPlacement from '../../functions/checkQwintoPlacement';
 
 import { MdClose } from 'react-icons/md';
 
-const itemSize = '35px';
+const itemSize = '40px';
 
 const QwintoBoardItem = ({
     row,
@@ -59,21 +59,22 @@ const QwintoBoardItem = ({
         return checkQwintoPlacement(board, total, row, col)
     }
 
-    return <Col className="p-1">
+    return <Col
+        container
+        justifyContent="center"
+        alignItems="center"
+        xs
+    >
         {
             isDisabledItem && <div className="QwintoBoardItem-input"></div>
         }
 
         {
-            !isDisabledItem && <div style={{
-                position: 'relative'
-            }}>
+            !isDisabledItem && <>
                 {
-                    !isValidPlacement() && !value && canApplyDraw && <div style={{
-                        position: 'absolute',
-                        width: itemSize,
-                        height: itemSize
-                    }}>
+                    !isValidPlacement() && !value && canApplyDraw && <div
+                        style={{ position: 'absolute' }}
+                    >
                         <MdClose style={{
                             fontSize: itemSize
                         }} />
@@ -81,17 +82,18 @@ const QwintoBoardItem = ({
                 }
 
                 <QwintoScore
-                    className={disabled ? 'pointer' : ''}
+                    className={disabled ? 'p-1 pointer' : 'p-1'}
                     formClick={handleClick}
                     inputChange={(event) => handleChange(event.target.value)}
                     disabled={disabled}
                     backgroundColor={color.secondary}
+                    borderColor={'grey'}
                     rounded={isScoreItem}
                     value={value}
                     size={itemSize}
                     bold
                 />
-            </div>
+            </>
         }
 
     </Col>

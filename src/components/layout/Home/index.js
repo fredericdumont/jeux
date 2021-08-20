@@ -1,5 +1,5 @@
-import { Button } from '@material-ui/core';
-import { Col, Row } from 'react-bootstrap';
+import { Grid } from '@material-ui/core';
+import { Button } from '@material-ui/core'
 import { useHistory } from 'react-router';
 import items from './items';
 
@@ -10,9 +10,15 @@ export const Home = () => {
         history.push(item.path);
     }
 
-    return <Row className="h-100 mt-2 justify-content-center align-items-center ">
+    return <Grid
+        container
+        justifyContent="center"
+        alignItems="center"
+        className="h-100"
+    >
         {
-            items.map((item, index) => <Col
+            items.map((item, index) => <Grid
+                item
                 key={index}
                 xs="auto"
                 style={{
@@ -28,11 +34,10 @@ export const Home = () => {
                 >
                     {item.label}
                 </Button>
-            </Col>
+            </Grid>
             )
         }
-
-    </Row>
+    </Grid>
 }
 
 export default Home;

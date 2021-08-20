@@ -1,24 +1,21 @@
 import React from 'react'
 
-import { Col, Modal, Row } from 'react-bootstrap';
+import { Col, Row } from 'components/layout/Grid';
 
 import QwintoScore from '../../QwintoScore';
 import colors from '../../QwintoDraw/colors';
 
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
 import { BiPlusMedical } from 'react-icons/bi'
+import Modal from 'components/layout/Modal';
 
 const QwintoResults = ({
     show,
     setShow,
     results
 }) => {
-    const handleClose = () => {
-        setShow(false);
-    }
-
     const getCols = (
         values = [],
         backgroundColor,
@@ -28,7 +25,7 @@ const QwintoResults = ({
     ) => {
         return (colors = null) => values.map((value, index) => <Col
             key={index}
-            xs={"auto"}
+            xs
         >
             <QwintoScore
                 color={backgroundColor}
@@ -42,61 +39,60 @@ const QwintoResults = ({
     }
 
     return <Modal
-        show={show}
-        onHide={handleClose}
+        open={show}
+        setOpen={setShow}
     >
-        <Modal.Header className="justify-content-center">
-            <Modal.Title>
-                Résultats
-            </Modal.Title>
-        </Modal.Header>
+        <Typography variant="h5">Résultats</Typography>
 
-        <Modal.Body>
-            <Row
-                className="ml-4 align-items-baseline justify-content-between"
-                noGutters
-            >
-                {
-                    getCols(results.rows, 'white')(colors)
-                }
+        <Row
+            className="mt-3"
+            alignItems="baseline"
+            justifyContent="space-between"
+            spacing={1}
+        >
+            {
+                getCols(results.rows, 'white')(colors)
+            }
 
-                <Col xs={"auto"}>
-                    <BiPlusMedical />
-                </Col>
+            <Col>
+                <BiPlusMedical />
+            </Col>
 
-                {
-                    getCols(results.cols, 'grey', 'white', null, true)()
-                }
+            {
+                getCols(results.cols, 'grey', 'white', null, true)()
+            }
 
-                <Col xs={"auto"}>
-                    <BiPlusMedical />
-                </Col>
+            <Col>
+                <BiPlusMedical />
+            </Col>
 
-                {
-                    getCols([results.errors], 'white', '#C4C4C4', 'black')()
-                }
+            {
+                getCols([results.errors], 'white', '#C4C4C4', 'black')()
+            }
 
-                <Col xs={"auto"}>
-                    <DoubleArrowIcon />
-                </Col>
+            <Col>
+                <DoubleArrowIcon />
+            </Col>
 
-                {
-                    getCols([results.total], 'white', '#C4C4C4', 'black')()
-                }
-            </Row>
-        </Modal.Body>
+            {
+                getCols([results.total], 'white', '#C4C4C4', 'black')()
+            }
+        </Row>
 
-        <Modal.Footer className="justify-content-end">
+        <Row
+            justifyContent="flex-end"
+            className="mt-3"
+        >
             <Button
                 variant="contained"
                 color="primary"
                 className="text-capitalize"
-                onClick={handleClose}
+                onClick={() => setShow(false)}
             >
                 Fermer
             </Button>
-        </Modal.Footer>
-    </Modal>
+        </Row>
+    </Modal >
 }
 
 export default QwintoResults
