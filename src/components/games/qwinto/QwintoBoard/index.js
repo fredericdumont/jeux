@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import generateArray from 'functions/generateArray';
 import { getFromStorage, saveToStorage } from 'functions/storage';
 
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'components/layout/Grid';
 import { Divider } from '@material-ui/core';
 
 import colors from '../QwintoDraw/colors';
@@ -55,35 +55,24 @@ const QwintoBoard = () => {
 
     return <div>
         {
-            board.rows.map((row, index) => <Row
-                className="mt-1"
+            board.rows.map((row, index) => <QwintoBoardRow
+                row={index}
+                color={colors[index]}
+                board={board}
+                setBoard={handleChangeBoard}
+                disabled={disabled}
+                canApplyDraw={canApplyDraw}
                 key={index}
-                noGutters
-            >
-                <Col
-                    xs={{
-                        span: 10,
-                        offset: 2 - index
-                    }}
-                >
-                    <QwintoBoardRow
-                        row={index}
-                        color={colors[index]}
-                        board={board}
-                        setBoard={handleChangeBoard}
-                        disabled={disabled}
-                        canApplyDraw={canApplyDraw}
-                    />
-                </Col>
-            </Row>
+            />
             )
         }
 
         <Divider className="mt-1" />
 
         <Row
-            className="mt-1 justify-content-between align-items-center"
-            noGutters
+            className="mt-1"
+            justifyContent="space-between"
+            alignContent="center"
         >
             <Col xs={6}>
                 <QwintoBoardErrors
@@ -106,13 +95,11 @@ const QwintoBoard = () => {
         <Divider className="mt-1 mb-1" />
 
         <Row
-            className="align-items-center justify-content-center"
-            noGutters
+            justifyContent="center"
+            alignItems="center"
         >
             <QwintoDraw setCanApplyDraw={setCanApplyDraw} />
         </Row>
-
-
     </div>
 }
 

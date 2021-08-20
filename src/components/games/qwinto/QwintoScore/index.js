@@ -1,6 +1,5 @@
+import { Row } from 'components/layout/Grid';
 import React from 'react'
-
-import { Form } from 'react-bootstrap';
 
 import './QwintoScore.css';
 
@@ -18,25 +17,26 @@ const QwintoScore = ({
     bold = false
 }) => {
     const getClasses = () => {
-        let basesClases = `border text-center align-top p-0 ${className}`
+        let classes = `text-center rounded font-text-bold align-top`
 
         if (rounded) {
-            basesClases += ' rounded-circle';
+            classes += ' rounded-circle';
         }
 
-        return basesClases;
+        return classes;
     }
 
     const getStyle = () => {
         const style = {
+            width: size,
+            height: size,
             backgroundColor,
-            width: `${size}`,
-            height: `${size}`,
+            border: 'none',
             color
         };
 
-        if (borderColor) {
-            style.borderColor = borderColor;
+        if(borderColor) {
+            style.border = `solid 1px ${borderColor}`
         }
 
         if (bold) {
@@ -46,19 +46,21 @@ const QwintoScore = ({
         return style;
     }
 
-    return <Form
-        className={`QwintoScore`}
+    return <Row
+        justifyContent="center"
+        className={`h-100 ${className}`}
         onClick={formClick}
     >
-        <Form.Control
-            type="number"
-            className={getClasses()}
-            style={getStyle()}
+        <input
             value={value}
             onChange={inputChange}
+            type="number"
+            id={'QwintoScore'}
+            style={getStyle()}
+            className={getClasses()}
             disabled={disabled}
         />
-    </Form>
+    </Row>
 }
 
 export default QwintoScore;

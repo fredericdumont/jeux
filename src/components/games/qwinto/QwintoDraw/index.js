@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Col } from 'react-bootstrap';
+import { Col } from 'components/layout/Grid';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';

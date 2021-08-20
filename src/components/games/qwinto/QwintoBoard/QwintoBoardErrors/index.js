@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'components/layout/Grid';
 import ErrorIcon from '@material-ui/icons/Error';
 
 import './qwintoBoardErrors.css';
@@ -32,10 +32,7 @@ const QwintoBoardErrors = ({ errors, setBoard }) => {
         }
     }
 
-    return <Row
-        className="justify-content-center"
-        noGutters
-    >
+    return <Row justifyContent="center">
         <Col
             style={{
                 backgroundColor: '#B8B8B8'
@@ -44,8 +41,9 @@ const QwintoBoardErrors = ({ errors, setBoard }) => {
             xs={7}
         >
             <Row
-                className="justify-content-center align-items-center"
-                noGutters
+                justifyContent="center"
+                alignContent="center"
+                alignItems="center"
             >
                 <Col
                     className="m-2 p-0"
