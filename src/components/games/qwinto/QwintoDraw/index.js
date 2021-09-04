@@ -34,12 +34,13 @@ export const QwintoDraw = ({ total, draws, random, setCanApplyDraw, selection })
     }
 
     const handleClick = () => {
+        const timestamp = Date.now();
         saveDraw({
-            random: randomNumber(0, 100000),
+            timestamp,
             values: [
-                selection[0] ? randomNumber() : null,
-                selection[1] ? randomNumber() : null,
-                selection[2] ? randomNumber() : null
+                selection[0] ? randomNumber(1, 6) : null,
+                selection[1] ? randomNumber(1, 6) : null,
+                selection[2] ? randomNumber(1, 6) : null
             ]
         });
     }
